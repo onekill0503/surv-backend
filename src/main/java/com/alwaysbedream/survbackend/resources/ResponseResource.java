@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alwaysbedream.survbackend.entity.Response.ResponseForm;
 import com.alwaysbedream.survbackend.services.Response.ResponseService;
+import com.alwaysbedream.survbackend.validation.UserIdValidation;
+import com.alwaysbedream.survbackend.validation.Response.CreateResponse;
+import com.alwaysbedream.survbackend.validation.Response.DeleteResponse;
 
 @RestController
 @RequestMapping("/")
@@ -24,33 +29,22 @@ public class ResponseResource {
     ResponseService responseService;
     
     @PutMapping("/response")
-    public ResponseEntity<Map<String ,String>> createResponse(@RequestBody Map<String , Object> responseMap){
-        Integer user_id = (Integer) responseMap.get("user_id");
-        String slug = (String) responseMap.get("form_slug");
-        String name = (String) responseMap.get("name");
-        Integer age = (Integer) responseMap.get("age");
-        String hobby = (String) responseMap.get("hobby");
-        String job = (String) responseMap.get("job");
-
-        responseService.createResponse(user_id, slug, name, age, hobby, job);
+    public ResponseEntity<Map<String ,String>> createResponse(@RequestBody @Valid CreateResponse responseMap){
+        responseService.createResponse(responseMap);
         Map<String , String> map = new HashMap<>();
         map.put("message" , "Successfully Submit your Response");
         return new ResponseEntity<>(map , HttpStatus.OK);
     }
     @PostMapping("/response")
-    public ResponseEntity<Map<String , List<ResponseForm>>> readUserResponses(@RequestBody Map<String , Object> responseMap){
-        Integer user_id = (Integer) responseMap.get("user_id");
-        List<ResponseForm> results = responseService.readResponseByUserId(user_id);
+    public ResponseEntity<Map<String , List<ResponseForm>>> readUserResponses(@RequestBody @Valid UserIdValidation responseMap){
+        List<ResponseForm> results = responseService.readResponseByUserId(responseMap);
         Map<String , List<ResponseForm>> map = new HashMap<>();
         map.put("data" , results);
         return new ResponseEntity<>(map , HttpStatus.OK);
     }
     @DeleteMapping("/response")
-    public ResponseEntity<Map<String ,String>> deleteResponse(@RequestBody Map<String , Object> responseMap){
-        Integer owner_id = (Integer) responseMap.get("owner_id");
-        Integer user_id = (Integer) responseMap.get("user_id");
-        String slug = (String) responseMap.get("slug");
-        responseService.deleteResponse(owner_id, user_id, slug);
+    public ResponseEntity<Map<String ,String>> deleteResponse(@RequestBody @Valid DeleteResponse responseMap){
+        responseService.deleteResponse(responseMap);
         Map<String , String> map = new HashMap<>();
         map.put("message" , "Successfully Delete the Response");
         return new ResponseEntity<>(map , HttpStatus.OK);

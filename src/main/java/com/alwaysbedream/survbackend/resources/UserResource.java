@@ -21,6 +21,7 @@ import com.alwaysbedream.survbackend.services.User.UserService;
 import com.alwaysbedream.survbackend.utils.JWTUtil;
 import com.alwaysbedream.survbackend.validation.User.Login;
 import com.alwaysbedream.survbackend.validation.User.Register;
+import com.alwaysbedream.survbackend.validation.User.Retrive;
 import com.alwaysbedream.survbackend.validation.User.changePassword;
 import com.alwaysbedream.survbackend.validation.User.updateData;
 
@@ -52,12 +53,11 @@ public class UserResource {
         return new ResponseEntity<>(map , HttpStatus.OK);
     }
     @PostMapping("/retrive")
-    public ResponseEntity<Map<String, Object>> retriveJWTToken(@RequestBody Map<String , Object> userMap) throws EtBadRequestException{
-        String token = (String) userMap.get("token");
+    public ResponseEntity<Map<String, Object>> retriveJWTToken(@RequestBody @Valid Retrive userMap) throws EtBadRequestException{
         // making response by parsed jwt token
         Map<String , Object> map = new HashMap<>();
         // create response data by parsed JWT Token
-        map.put("data" , userService.parseJWTToken(token));
+        map.put("data" , userService.parseJWTToken(userMap.getToken()));
         return new ResponseEntity<>(map , HttpStatus.OK);
     }
     @PostMapping("/update")
@@ -70,7 +70,7 @@ public class UserResource {
         return new ResponseEntity<>(map , HttpStatus.OK);
     }
     @PostMapping("changepassword")
-    public ResponseEntity<Map<String, String>> changeUserPassword(@RequestBody changePassword userMap) {
+    public ResponseEntity<Map<String, String>> changeUserPassword(@RequestBody @Valid changePassword userMap) {
         // start to update the password
         userService.changePassword(userMap);
         // prepare the response data;

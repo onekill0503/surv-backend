@@ -1,8 +1,8 @@
 package com.alwaysbedream.survbackend.validation.User;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Login {
     @NotNull(message = "password cant be empty")
-    @Min(value = 3 , message = "Password to Short (min 3 digits)")
+    @Size(min = 3 , message = "Password to Short (min 3 digits)")
     private String password;
     
     @NotNull(message = "email cant be empty")

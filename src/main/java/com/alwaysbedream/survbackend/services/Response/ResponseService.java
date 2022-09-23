@@ -6,9 +6,12 @@ import com.alwaysbedream.survbackend.entity.Response.Response;
 import com.alwaysbedream.survbackend.entity.Response.ResponseForm;
 import com.alwaysbedream.survbackend.exceptions.EtBadRequestException;
 import com.alwaysbedream.survbackend.exceptions.EtResourceNotFoundException;
+import com.alwaysbedream.survbackend.validation.UserIdValidation;
+import com.alwaysbedream.survbackend.validation.Response.CreateResponse;
+import com.alwaysbedream.survbackend.validation.Response.DeleteResponse;
 
 public interface ResponseService {
-    void deleteResponse(Integer owner_id , Integer id , String slug) throws EtBadRequestException;
-    List<ResponseForm> readResponseByUserId(Integer user_id) throws EtResourceNotFoundException;
-    Response createResponse(Integer user_id , String slug , String name , Integer age , String hobby , String job) throws EtBadRequestException;
+    void deleteResponse(DeleteResponse responseData) throws EtBadRequestException;
+    List<ResponseForm> readResponseByUserId(UserIdValidation user_id) throws EtResourceNotFoundException;
+    Response createResponse(CreateResponse responseData) throws EtBadRequestException;
 }

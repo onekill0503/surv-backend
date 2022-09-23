@@ -1,8 +1,7 @@
 package com.alwaysbedream.survbackend.validation.User;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,16 +14,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class changePassword {
     @NotNull(message = "User ID is Required")
-    @NotEmpty(message = "User ID can't be empty")
     private Integer user_id;
 
     @NotNull(message = "Old Password is required")
-    @NotEmpty(message = "Old Password can't be empty")
-    @Min(value = 3 , message = "Old Password to short (min 3 digits)")
+    @Size(min = 3 , message = "Old Password to short (min 3 digits)")
     private String old_password;
     
     @NotNull(message = "New Password is required")
-    @NotEmpty(message = "New Password can't be empty")
-    @Min(value = 3 , message = "New Password to short (min 3 digits)")
+    @Size(min = 3 , message = "New Password to short (min 3 digits)")
     private String new_password;
 }
