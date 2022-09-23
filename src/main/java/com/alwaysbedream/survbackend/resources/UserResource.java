@@ -3,9 +3,12 @@ package com.alwaysbedream.survbackend.resources;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +19,13 @@ import com.alwaysbedream.survbackend.entity.User.User;
 import com.alwaysbedream.survbackend.exceptions.EtBadRequestException;
 import com.alwaysbedream.survbackend.services.User.UserService;
 import com.alwaysbedream.survbackend.utils.JWTUtil;
+import com.alwaysbedream.validation.User.Login;
+import com.alwaysbedream.validation.User.Register;
+import com.alwaysbedream.validation.User.changePassword;
+import com.alwaysbedream.validation.User.updateData;
 
 @RestController
+@Validated
 @RequestMapping("/account")
 public class UserResource {
     
@@ -25,26 +33,18 @@ public class UserResource {
     UserService userService;
 
     @PutMapping("/register")
-    public ResponseEntity<Map<String , String>> registerUser(@RequestBody Map<String, Object> userMap) {
-        // get all request data
-        String firstname = (String) userMap.get("firstname");
-        String lastname = (String) userMap.get("lastname");
-        String email = (String) userMap.get("email");
-        String password = (String) userMap.get("password");
+    public ResponseEntity<Map<String , String>> registerUser(@RequestBody @Valid Register userMap) {
         // call user services
-        userService.registerUser(firstname , lastname , email,password);
+        userService.registerUser(userMap);
         // create response data
         Map<String , String> map = new HashMap<>();
         map.put("message", "User Successfully Registered");
         return new ResponseEntity<>(map , HttpStatus.OK);
     }
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> loginUser(@RequestBody Map<String, Object> userMap) {
-        // get all request data
-        String email = (String) userMap.get("email");
-        String password = (String) userMap.get("password");
+    public ResponseEntity<Map<String, String>> loginUser(@RequestBody @Valid Login userMap) {
         // call user service
-        User user = userService.validateUser(email,password);
+        User user = userService.validateUser(userMap);
         // create response data
         Map<String , String> map = new HashMap<>();
         map.put("message" , "Successfully Logged In !");
@@ -61,26 +61,18 @@ public class UserResource {
         return new ResponseEntity<>(map , HttpStatus.OK);
     }
     @PostMapping("/update")
-    public ResponseEntity<Map<String, String>> updateUserData(@RequestBody Map<String, Object> userMap){
-        // get request data
-        Integer user_id = (Integer) userMap.get("user_id");
-        String firstname = (String) userMap.get("firstname");
-        String lastname = (String) userMap.get("lastname");
-        String email = (String) userMap.get("email");
+    public ResponseEntity<Map<String, String>> updateUserData(@RequestBody @Valid updateData userMap){
         // update the user data
-        User user = userService.updateData(user_id, firstname, lastname, email);
+        User user = userService.updateData(userMap);
         Map<String , String> map = new HashMap<>();
         map.put("message" , "Successfully Update User Data !");
         map.put("token" , JWTUtil.generateToken(user));
         return new ResponseEntity<>(map , HttpStatus.OK);
     }
     @PostMapping("changepassword")
-    public ResponseEntity<Map<String, String>> changeUserPassword(@RequestBody Map<String, Object> userMap) {
-        Integer user_id = (Integer) userMap.get("user_id");
-        String old_password = (String) userMap.get("old_password");
-        String new_password = (String) userMap.get("new_password");
+    public ResponseEntity<Map<String, String>> changeUserPassword(@RequestBody changePassword userMap) {
         // start to update the password
-        userService.changePassword(user_id, new_password, old_password);
+        userService.changePassword(userMap);
         // prepare the response data;
         Map<String , String> map = new HashMap<>();
         map.put("message" , "Successfully Update Your Password!");
