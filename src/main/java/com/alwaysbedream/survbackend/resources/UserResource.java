@@ -19,10 +19,10 @@ import com.alwaysbedream.survbackend.entity.User.User;
 import com.alwaysbedream.survbackend.exceptions.EtBadRequestException;
 import com.alwaysbedream.survbackend.services.User.UserService;
 import com.alwaysbedream.survbackend.utils.JWTUtil;
-import com.alwaysbedream.validation.User.Login;
-import com.alwaysbedream.validation.User.Register;
-import com.alwaysbedream.validation.User.changePassword;
-import com.alwaysbedream.validation.User.updateData;
+import com.alwaysbedream.survbackend.validation.User.Login;
+import com.alwaysbedream.survbackend.validation.User.Register;
+import com.alwaysbedream.survbackend.validation.User.changePassword;
+import com.alwaysbedream.survbackend.validation.User.updateData;
 
 @RestController
 @Validated

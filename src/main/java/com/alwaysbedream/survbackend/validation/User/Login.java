@@ -1,4 +1,4 @@
-package com.alwaysbedream.validation.User;
+package com.alwaysbedream.survbackend.validation.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
